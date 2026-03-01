@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>《天工開物》總複習測驗</title>
+    <title>《天工開物》測驗與診斷</title>
     <style>
         :root {
             --primary: #2c3e50;
@@ -12,53 +12,57 @@
             --error: #e74c3c;
             --bg: #ffffff;
         }
-        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background-color: #f4f7f6; color: #333; margin: 0; padding: 15px; line-height: 1.6; }
-        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        header { text-align: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 25px; }
+        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background-color: #f8f9fa; color: #333; margin: 0; padding: 15px; }
+        .container { max-width: 600px; margin: 0 auto; background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
         
-        .info-box { background: #f9f9f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; display: flex; flex-wrap: wrap; gap: 10px; }
-        .info-box div { flex: 1 1 120px; }
+        /* 學生資訊 */
+        .info-box { background: #f1f3f5; border-radius: 10px; padding: 15px; margin-bottom: 20px; display: grid; gap: 10px; grid-template-columns: 1fr 1fr; }
+        .info-box div.full { grid-column: span 2; }
+        label { font-size: 0.8rem; font-weight: bold; color: #666; display: block; margin-bottom: 4px; }
         input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
 
-        .q-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; margin-bottom: 15px; position: relative; }
-        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: white; background: #95a5a6; margin-bottom: 10px; }
-        .q-text { font-weight: bold; margin-bottom: 10px; }
-        .options { display: grid; gap: 8px; }
-        .opt-btn { background: #fff; border: 1px solid #ddd; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; transition: 0.2s; }
-        .opt-btn.selected { border-color: var(--accent); background-color: #ebf5fb; color: var(--accent); font-weight: bold; }
-        
-        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 15px; border: none; border-radius: 10px; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
-        
-        /* 結果分析樣式 */
+        /* 題目樣式 */
+        .q-card { border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; color: white; background: var(--accent); margin-bottom: 10px; }
+        .options { display: grid; gap: 10px; margin-top: 15px; }
+        .opt-btn { background: #fff; border: 2px solid #f0f0f0; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; transition: 0.2s; }
+        .opt-btn.selected { border-color: var(--accent); background-color: #ebf5fb; font-weight: bold; }
+
+        /* 交卷按鈕 */
+        #submit-btn { width: 100%; background: var(--primary); color: white; padding: 18px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; cursor: pointer; margin-top: 10px; }
+
+        /* 結果與錯題清單 */
         #result-area { display: none; }
-        .score-display { text-align: center; padding: 30px; border-bottom: 2px dashed #eee; margin-bottom: 20px; }
-        .score { font-size: 4rem; color: var(--success); font-weight: bold; }
-        .review-card { padding: 15px; border-radius: 10px; margin-bottom: 10px; border-left: 5px solid #ccc; }
-        .review-correct { border-left-color: var(--success); background: #f0fff4; }
-        .review-wrong { border-left-color: var(--error); background: #fff5f5; }
-        .ans-info { font-size: 0.9rem; margin-top: 5px; font-weight: bold; }
-        .correct-ans { color: var(--success); }
-        .wrong-ans { color: var(--error); }
+        .score-box { text-align: center; margin-bottom: 30px; }
+        .score-num { font-size: 4rem; color: var(--success); font-weight: bold; }
+        
+        .review-item { padding: 15px; border-radius: 8px; margin-bottom: 12px; border-left: 6px solid #dee2e6; background: #fff; border: 1px solid #eee; border-left-width: 6px; }
+        .review-item.correct { border-left-color: var(--success); }
+        .review-item.wrong { border-left-color: var(--error); }
+        .status-label { font-weight: bold; margin-bottom: 5px; display: block; }
+        .correct-text { color: var(--success); font-weight: bold; }
+        .wrong-text { color: var(--error); font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div class="container" id="quiz-container">
-    <header><h1>《天工開物》總複習</h1></header>
+    <h2 style="text-align:center">《天工開物》總複習測驗</h2>
     <div class="info-box">
         <div><label>班級</label><input type="text" id="stu-class"></div>
         <div><label>座號</label><input type="number" id="stu-no"></div>
-        <div style="flex: 1 1 100%;"><label>姓名</label><input type="text" id="stu-name"></div>
+        <div class="full"><label>姓名</label><input type="text" id="stu-name"></div>
     </div>
     <div id="questions-list"></div>
-    <button id="submit-btn" onclick="submitToGoogle()">提交並查看結果</button>
+    <button id="submit-btn" onclick="processResults()">完成交卷並查看錯題</button>
 </div>
 
 <div class="container" id="result-area">
-    <div class="score-display">
-        <h2>測驗完成！您的得分：</h2>
-        <div class="score" id="final-score">0</div>
-        <p>下方為您的作答診斷：</p>
+    <div class="score-box">
+        <h2>測驗結束！您的分數</h2>
+        <div class="score-num" id="final-score">0</div>
+        <hr>
+        <h3 style="text-align:left">作答診斷報告：</h3>
     </div>
     <div id="review-list"></div>
     <button onclick="location.reload()" style="width:100%; padding:10px; margin-top:20px;">重新測驗</button>
@@ -67,6 +71,7 @@
 <iframe name="hidden_iframe" style="display:none;"></iframe>
 
 <script>
+// 題庫資料
 const questionBank = [
     { t: "作者背景", q: "《天工開物》書名中的「天工」一詞，其典故來源為何？", a: "出自《尚書》「天工人其代之」，指大自然的巧妙需要由人類代為完成。", b: "出自《易經》「開物成務」，指開發萬物、建立經濟與社會制度。", c: "A" },
     { t: "作者背景", q: "宋應星的《天工開物》在中國科學史上有極高的地位，它是一部什麼性質的著作？", a: "記錄明代農業與手工產業技術發展的百科全書。", b: "探討明代經世致用思想與哲學思辨的語錄彙編。", c: "A" },
@@ -80,78 +85,107 @@ const questionBank = [
     { t: "科學工藝", q: "宋應星提到要讓膏液「傾注而出」，必須憑藉什麼方法？", a: "依靠長時間的靜置與天然陽光的曝曬。", b: "藉助水火的熬煮，以及木石工具的壓榨。", c: "B" },
     { t: "科學工藝", q: "「乃車得一輈而轉轄，舟得一石而罅完，非此物之為功也不可行矣。」這段話說明了膏液（油脂）在交通工具中扮演什麼關鍵角色？", a: "作為驅動舟車前進的主要燃料動力。", b: "作為車軸的潤滑劑以及船隻縫隙的填補物。", c: "B" },
     { t: "科學工藝", q: "〈殺青緒言〉中的「殺青」一詞，在此篇文章中主要指代何種技術？", a: "處理竹木原料以造紙的技術。", b: "烘焙茶葉以去除水分的技術。", c: "A" },
-    { t: "科學工藝", q: "「古傳今而華達夷，使後起含生，目授而心識之，承載者以何物哉？」此處的「承載者」指的是什麼？", a: "能夠跨越時空、傳遞知識與文化的「紙張與書籍」。", b: "能夠跨越地理限制、運送學者與物資的「舟車交通」。", c: "A" },
-    { t: "科學工藝", q: "「身為竹骨與木皮，殺其青而白乃見，萬卷百家，基從此起。」這段話描寫的過程為何？", a: "砍伐森林中的竹木來興建藏書閣的過程。", b: "褪去竹木表皮的青色，提煉出白色纖維來造紙的過程。", c: "B" },
-    { t: "文意理解", q: "作者感嘆「使漢、晉時人擅名記者，何其陋哉！」其原因為何？", a: "漢晉時期的文人學識不足，寫出的文章內容不如明代豐富。", b: "漢晉時期的人仍多仰賴笨重的竹簡木札，比起後世的紙張顯得簡陋不便。", c: "B" },
-    { t: "統測趨勢", q: "綜合三篇緒言，《天工開物》一書最想傳達的哲理為何？", a: "順應自然、減少人為干預的道家「無為」思想。", b: "強調「人力」與「自然」相輔相成，肯定勞動與工藝價值的實用主義。", c: "B" },
+    { t: "科學工藝", q: "「古傳今而華達夷，使後起含生，目授而心識之...」此處「承載者」指？", a: "能夠跨越時空傳遞知識文化的「紙張與書籍」。", b: "能夠跨越地理限制運送學者物資的「舟車交通」。", c: "A" },
+    { t: "科學工藝", q: "「殺其青而白乃見，萬卷百家，基從此起。」這段話描寫的過程為何？", a: "砍伐森林中的竹木來興建藏書閣的過程。", b: "褪去竹木表皮的青色，提煉出白色纖維來造紙的過程。", c: "B" },
+    { t: "文意理解", q: "作者感嘆「使漢、晉時人擅名記者，何其陋哉！」其原因為何？", a: "漢晉文人學識不足，內容不如明代豐富。", b: "漢晉人仍多仰賴笨重竹簡木札，比起後世紙張顯得簡陋不便。", c: "B" },
+    { t: "統測趨勢", q: "綜合三篇緒言，《天工開物》一書最想傳達的哲理為何？", a: "順應自然、減少人為干預的道家「無為」思想。", b: "強調「人力」與「自然」相輔相成，肯定勞動與工藝價值。", c: "B" },
     { t: "統測趨勢", q: "「若各居而老死，何藉有群『類』哉」中的「類」字，意思為何？", a: "指「群體、同類」，名詞用法。", b: "指「類似、好像」，動詞用法。", c: "A" },
-    { t: "統測趨勢", q: "多數航空公司推出『類』出國航班」中的「類」字，與下列何者意思相同？", a: "仰觀宇宙之大，俯察品「類」之盛。", b: "病瘻，隆然伏行，有「類」癩駝者。", c: "B" },
-    { t: "統測趨勢", q: "劉半農將文章分為「應用文」與「文學文」。他認為兩者最大的差異為何？", a: "應用文如同家常便飯，重視實用與傳遞訊息；文學文如同肥魚大肉，重視藝術與美感。", b: "應用文必須遵守嚴格的公文法規；文學文則是隨性創作，不需要任何章法。", c: "A" },
-    { t: "統測趨勢", q: "若以劉半農的分類標準來看，宋應星撰寫《天工開物》主要記錄農業與手工技術，其本質最符合哪一種文體定義？", a: "屬於滿足日常實用需求、通人應世之書的「應用文」。", b: "屬於注重修辭造句、陶冶性情的「文學文」。", c: "A" }
+    { t: "統測趨勢", q: "航空公司推出『類』出國航班」中的「類」字，與下列何者意思相同？", a: "仰觀宇宙之大，俯察品「類」之盛。", b: "病瘻，隆然伏行，有「類」癩駝者。", c: "B" },
+    { t: "統測趨勢", q: "劉半農將文章分為「應用文」與「文學文」。兩者最大差異為何？", a: "應用文重實用如家常便飯；文學文重美感如肥魚大肉。", b: "應用文須守法規；文學文不需章法。", c: "A" },
+    { t: "統測趨勢", q: "以劉半農的分類來看，《天工開物》的本質最符合哪種文體？", a: "屬於滿足日常實用需求、通人應世之書的「應用文」。", b: "屬於注重修辭造句、陶冶性情的「文學文」。", c: "A" }
 ];
 
-const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 15);
+// 隨機抽選 15 題
+let selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 15);
 let userAnswers = {};
 
+// 渲染題目
 const listEl = document.getElementById('questions-list');
 selected.forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'q-card';
-    card.innerHTML = `<span class="tag">${item.t}</span><div class="q-text">${i+1}. ${item.q}</div>
+    card.innerHTML = `
+        <span class="tag">${item.t}</span>
+        <div style="font-weight:bold">${i+1}. ${item.q}</div>
         <div class="options">
             <button class="opt-btn" onclick="pick(${i}, 'A', this)">(A) ${item.a}</button>
             <button class="opt-btn" onclick="pick(${i}, 'B', this)">(B) ${item.b}</button>
-        </div>`;
+        </div>
+    `;
     listEl.appendChild(card);
 });
 
 function pick(i, val, btn) {
     userAnswers[i] = val;
-    btn.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+    Array.from(btn.parentElement.children).forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
 }
 
-function submitToGoogle() {
+function processResults() {
     const cls = document.getElementById('stu-class').value;
     const no = document.getElementById('stu-no').value;
     const name = document.getElementById('stu-name').value;
-    if(!cls || !no || !name) { alert("請填寫基本資料"); return; }
-    if(Object.keys(userAnswers).length < 15) { alert("請完成所有題目"); return; }
+
+    if(!cls || !no || !name) { alert("請完整填寫班級、座號與姓名！"); return; }
+    if(Object.keys(userAnswers).length < 15) { alert("還有題目沒寫完喔！"); return; }
 
     let score = 0;
     const reviewList = document.getElementById('review-list');
-    reviewList.innerHTML = "";
+    reviewList.innerHTML = ""; // 清空舊內容
 
     selected.forEach((item, i) => {
         const isCorrect = userAnswers[i] === item.c;
         if(isCorrect) score += Math.round(100/15);
+
+        // 動態建立診斷卡片
+        const div = document.createElement('div');
+        div.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
         
-        const rCard = document.createElement('div');
-        rCard.className = `review-card ${isCorrect ? 'review-correct' : 'review-wrong'}`;
-        rCard.innerHTML = `<div>${i+1}. ${item.q}</div>
-            <div class="ans-info">
-                您的答案：<span class="${isCorrect ? 'correct-ans' : 'wrong-ans'}">(${userAnswers[i]})</span> | 
-                正確答案：<span class="correct-ans">(${item.c})</span>
-            </div>`;
-        reviewList.appendChild(rCard);
+        const userLabel = isCorrect ? '<span class="correct-text">正確 (✓)</span>' : '<span class="wrong-text">錯誤 (✗)</span>';
+        const correctText = item.c === 'A' ? item.a : item.b;
+        const userText = userAnswers[i] === 'A' ? item.a : item.b;
+
+        div.innerHTML = `
+            <span class="status-label">第 ${i+1} 題：${userLabel}</span>
+            <div style="font-size:0.95rem; margin-bottom:8px;">${item.q}</div>
+            <div style="font-size:0.85rem; color:#666;">
+                您的選擇：<span class="${isCorrect ? 'correct-text' : 'wrong-text'}">${userText}</span><br>
+                正確答案：<span class="correct-text">${correctText}</span>
+            </div>
+        `;
+        reviewList.appendChild(div);
     });
 
-    // 送出表單 (保持您確認過的 ID)
-    const formID = "1FAIpQLSeKwAK1Zama9OYbUrgThIbhncSMrehNlQ4r7dZMnq8zB2ZwKA";
-    const entries = { "entry.1811616198": cls, "entry.1530773459": no, "entry.923003213": name, "entry.1489395625": score };
-    const form = document.createElement('form');
-    form.method = "POST"; form.target = "hidden_iframe";
-    form.action = `https://docs.google.com/forms/d/e/${formID}/formResponse`;
-    for(let key in entries) {
-        let input = document.createElement('input'); input.type="hidden"; input.name=key; input.value=entries[key];
-        form.appendChild(input);
-    }
-    document.body.appendChild(form); form.submit(); document.body.removeChild(form);
+    // 送出至 Google 表單 (後台紀錄)
+    sendToGoogle(cls, no, name, score);
 
+    // 切換顯示介面
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-area').style.display = 'block';
     document.getElementById('final-score').innerText = score;
     window.scrollTo(0,0);
+}
+
+function sendToGoogle(cls, no, name, score) {
+    const formID = "1FAIpQLSeKwAK1Zama9OYbUrgThIbhncSMrehNlQ4r7dZMnq8zB2ZwKA";
+    const entries = {
+        "entry.1811616198": cls,
+        "entry.1530773459": no,
+        "entry.923003213": name,
+        "entry.1489395625": score
+    };
+    const form = document.createElement('form');
+    form.method = "POST";
+    form.action = `https://docs.google.com/forms/d/e/${formID}/formResponse`;
+    form.target = "hidden_iframe";
+    for(let key in entries) {
+        let input = document.createElement('input');
+        input.type="hidden"; input.name=key; input.value=entries[key];
+        form.appendChild(input);
+    }
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
 }
 </script>
 </body>
