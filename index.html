@@ -10,16 +10,16 @@
             --accent: #3498db;
             --success: #27ae60;
             --bg: #ffffff;
-            --tag-author: #8e44ad; /* 紫色：作者 */
-            --tag-transport: #e67e22; /* 橘色：舟車 */
-            --tag-oil: #f1c40f; /* 黃色：膏液 */
-            --tag-paper: #27ae60; /* 綠色：殺青 */
-            --tag-trend: #e74c3c; /* 紅色：統測趨勢 */
+            /* 鮮明標籤顏色 */
+            --color-author: #8e44ad; /* 紫色：作者與背景 */
+            --color-understanding: #e67e22; /* 橘色：文意理解 */
+            --color-science: #2980b9; /* 藍色：科學與工藝 */
+            --color-exam: #e74c3c; /* 紅色：統測趨勢 */
         }
-        body { font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg); color: #333; margin: 0; padding: 15px; line-height: 1.6; }
+        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background-color: var(--bg); color: #333; margin: 0; padding: 15px; line-height: 1.6; }
         .container { max-width: 600px; margin: 0 auto; }
         header { text-align: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 25px; padding: 10px 0; }
-        h1 { font-size: 1.5rem; color: var(--primary); margin: 5px 0; }
+        h1 { font-size: 1.4rem; color: var(--primary); margin: 5px 0; }
         
         /* 學生資訊 */
         .info-box { background: #f9f9f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px; }
@@ -29,22 +29,21 @@
         input:focus { border-color: var(--accent); outline: none; }
 
         /* 題目卡片 */
-        .q-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .tag { display: inline-block; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; margin-bottom: 12px; }
+        .q-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); position: relative; overflow: hidden; }
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; margin-bottom: 12px; }
         
-        .tag-作者 { background-color: var(--tag-author); }
-        .tag-舟車 { background-color: var(--tag-transport); }
-        .tag-膏液 { background-color: var(--tag-oil); color: #333; }
-        .tag-殺青 { background-color: var(--tag-paper); }
-        .tag-趨勢 { background-color: var(--tag-trend); }
+        .tag-作者背景 { background-color: var(--color-author); }
+        .tag-文意理解 { background-color: var(--color-understanding); }
+        .tag-科學工藝 { background-color: var(--color-science); }
+        .tag-統測趨勢 { background-color: var(--color-exam); }
 
         .q-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: var(--primary); }
-        .options { display: grid; gap: 10px; }
+        .options { display: grid; gap: 12px; }
         .opt-btn { background: #fff; border: 2px solid #f0f0f0; padding: 14px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 1rem; transition: 0.2s; line-height: 1.4; }
         .opt-btn:hover { background-color: #fcfcfc; }
         .opt-btn.selected { border-color: var(--accent); background-color: #ebf5fb; font-weight: bold; color: var(--accent); }
         
-        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 18px; border: none; border-radius: 10px; font-size: 1.25rem; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 18px; border: none; border-radius: 10px; font-size: 1.25rem; font-weight: bold; margin-top: 25px; cursor: pointer; transition: 0.3s; }
         #submit-btn:hover { background: #1a252f; }
         
         #result-area { display: none; text-align: center; padding: 60px 20px; }
@@ -63,7 +62,7 @@
     <div class="info-box">
         <div><label>班級</label><input type="text" id="stu-class" placeholder="如 811"></div>
         <div><label>座號</label><input type="number" id="stu-no" placeholder="座號"></div>
-        <div style="flex: 1 1 100%;"><label>姓名</label><input type="text" id="stu-name" placeholder="請輸入姓名"></div>
+        <div style="flex: 1 1 100%;"><label>姓名</label><input type="text" id="stu-name" placeholder="請填寫姓名"></div>
     </div>
 
     <div id="questions-list"></div>
@@ -74,38 +73,37 @@
     <h2 style="color:var(--primary)">測驗提交完成！</h2>
     <p>您的得分為</p>
     <div class="score" id="final-score">0</div>
-    <p>分數已同步至老師的 Google 表單後台。</p>
-    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline; font-size:1rem; margin-top:20px;">重新測驗挑戰</button>
+    <p>您的紀錄已即時回傳至 Google 表單後台。</p>
+    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline; font-size:1rem; margin-top:20px;">重新測驗</button>
 </div>
 
 <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
 
 <script>
-// 根據提供內容建立的完整 20 題庫
+// 完整取材自圖片之 19 題庫
 const questionBank = [
-    { t: "作者", q: "《天工開物》書名中的「天工」一詞，其典故來源為何？", a: "出自《尚書》「天工人其代之」，指大自然的巧妙需要由人類代完成。", b: "出自《易經》「開物成務」，指開發萬物、建立經濟與社會制度。", c: "A" },
-    { t: "作者", q: "宋應星的《天工開物》在中國科學史上有極高的地位，它是一部什麼性質的著作？", a: "記錄明代農業與手工產業技術發展的百科全書。", b: "探討明代經世致用思想與哲學思辨的語錄彙編。", c: "A" },
-    { t: "作者", q: "英國科學史家李約瑟將宋應星比喻為哪位西方歷史人物？", a: "提出科學革命理論的「中國的哥白尼」。", b: "十八世紀編纂百科全書的「中國的狄德羅」。", c: "B" },
-    { t: "作者", q: "關於《天工開物》的流傳歷史，下列敘述何者正確？", a: "該書在清代被廣泛編入《四庫全書》中，成為家喻戶曉的農學教材。", b: "該書在中國一度失傳，直到民國初年才由學者從日本尋得重新刊行。", c: "B" },
-    { t: "舟車", q: "「物有賤而必須，坐窮負販。」這段話主要點出了什麼問題？", a: "古代社會階級森嚴，貴族平民交通工具有嚴格限制。", b: "解決長途跋涉勞累，以及促進物資流通互通有無的必要性。", c: "B" },
-    { t: "舟車", q: "「南資舟而北資車，梯航萬國，能使帝京元氣充然。」反映了何種現象？", a: "因地理環境差異而發展不同交通方式，並帶動國家繁榮。", b: "南方造船與北方造車技術互相競爭，促進明代工業革新。", c: "A" },
-    { t: "舟車", q: "「何其始造舟車者，不食尸祝之報也？」此句使用了何種修辭語氣？", a: "藉由激問語氣表達對發明者未獲祭祀報答的慨嘆。", b: "藉由懸問語氣探討古代為何沒有建立祭祀發明者的制度。", c: "A" },
-    { t: "舟車", q: "作者認為發明舟車的先人，其功績應該受到何種評價？", a: "其智慧與造福人類功績宛若神人，值得後世尊崇。", b: "雖有功勞，但因破壞自然，故在古代不被主流文人重視。", c: "A" },
-    { t: "膏液", q: "「草木之實，其中蘊藏膏液，而不能自流」傳達的核心科學觀念是？", a: "多數物質必須仰賴人工技術與工具介入才能供人使用。", b: "植物種子油脂會隨著季節變化乾涸，必須把握時間採收。", c: "A" },
-    { t: "膏液", q: "宋應星提到讓膏液「傾注而出」，必須憑藉什麼方法？", a: "依靠長時間靜置與天然陽光曝曬。", b: "藉助水火熬煮，以及木石工具壓榨。", c: "B" },
-    { t: "膏液", q: "「舟得一石而罅完，非此物之為功也不可行矣。」膏液扮演什麼角色？", a: "作為驅動舟車前進的主要燃料動力。", b: "作為車軸潤滑劑以及船隻縫隙的填補物。", c: "B" },
-    { t: "殺青", q: "〈殺青緒言〉中的「殺青」一詞，在此篇文章中主要指代？", a: "處理竹木原料以造紙的技術。", b: "烘焙茶葉以去除水分的技術。", c: "A" },
-    { t: "殺青", q: "「古傳今而華達夷...承載者以何物哉？」此處的「承載者」指？", a: "跨越時空傳遞知識文化的「紙張與書籍」。", b: "跨越地理限制運送學者物資的「舟車交通」。", c: "A" },
-    { t: "殺青", q: "「殺其青而白乃見，萬卷百家，基從此起。」這段話描寫的過程為？", a: "砍伐森林竹木來興建藏書閣的過程。", b: "褪去竹木青色表皮，提煉白色纖維造紙的過程。", c: "B" },
-    { t: "殺青", q: "作者感嘆「漢、晉時人擅名記者，何其陋哉！」原因為何？", a: "漢晉文人學識不足，文章內容不如明代豐富。", b: "漢晉人多仰賴笨重竹簡木札，比起後世紙張顯得簡陋。", c: "B" },
-    { t: "趨勢", q: "《天工開物》一書最想傳達的哲理為何？", a: "順應自然、減少人為干預的道家「無為」思想。", b: "強調「人力」與「自然」相輔相成，肯定勞動與工藝價值。", c: "B" },
-    { t: "趨勢", q: "「若各居而老死，何藉有群『類』哉」中的「類」字，意思為何？", a: "指「群體、同類」，名詞用法。", b: "指「類似、好像」，動詞用法。", c: "A" },
-    { t: "趨勢", q: "多數航空公司推出『類』出國航班」中的「類」字，與下列何者相同？", a: "仰觀宇宙之大，俯察品「類」之盛。", b: "病瘻，隆然伏行，有「類」癩駝者。", c: "B" },
-    { t: "趨勢", q: "劉半農認為「應用文」與「文學文」最大的差異為何？", a: "應用文如家常便飯重實用；文學文如肥魚大肉重藝術美感。", b: "應用文須遵守法規；文學文隨性創作不需章法。", c: "A" },
-    { t: "趨勢", q: "以劉半農的分類來看，《天工開物》的本質最符合哪種文體？", a: "屬於滿足日常實用需求、通人應世之書的「應用文」。", b: "屬於注重修辭造句、陶冶性情的「文學文」。", c: "A" }
+    { t: "作者背景", q: "《天工開物》書名中的「天工」一詞，其典故來源為何？", a: "出自《尚書》「天工人其代之」，指大自然的巧妙需要由人類代為完成。", b: "出自《易經》「開物成務」，指開發萬物、建立經濟與社會制度。", c: "A" },
+    { t: "作者背景", q: "宋應星的《天工開物》在中國科學史上有極高的地位，它是一部什麼性質的著作？", a: "記錄明代農業與手工產業技術發展的百科全書。", b: "探討明代經世致用思想與哲學思辨的語錄彙編。", c: "A" },
+    { t: "作者背景", q: "英國科學史家李約瑟（Joseph Needham）對宋應星給予極高評價，將他比喻為哪位西方歷史人物？", a: "提出科學革命理論的「中國的哥白尼」。", b: "十八世紀編纂百科全書的「中國的狄德羅」。", c: "B" },
+    { t: "作者背景", q: "關於《天工開物》的流傳歷史，下列敘述何者正確？", a: "該書在清代被廣泛編入《四庫全書》中，成為家喻戶曉的農學教材。", b: "該書在中國一度失傳，直到民國初年才由學者從日本尋得舊本並重新刊行。", c: "B" },
+    { t: "文意理解", q: "文中提到「人有貴而必出，行畏周行；物有賤而必須，坐窮負販。」這段話主要點出了什麼問題？", a: "古代社會階級森嚴，貴族平民在交通工具的使用上有嚴格的限制。", b: "解決人類長途跋涉的勞累，以及促進物資流通互通有無的必要性。", c: "B" },
+    { t: "文意理解", q: "「四海之內，南資舟而北資車，梯航萬國，能使帝京元氣充然。」此句反映了何種現象？", a: "因地理環境差異而發展出不同的交通方式，並帶動了國家整體的繁榮。", b: "南方造船與北方造車的技術互相競爭，促進了明代工業技術的革新。", c: "A" },
+    { t: "文意理解", q: "作者在文末感嘆：「何其始造舟車者，不食尸祝之報也？」這句話使用了何種修辭語氣？", a: "內心毫無疑問，藉由反問（激問）語氣來表達對發明者未獲祭祀報答的慨嘆。", b: "內心充滿疑問，藉由懸問語氣來探討古代為何沒有建立祭祀發明者的制度。", c: "A" },
+    { t: "文意理解", q: "作者認為發明舟車的先人，其功績應該受到何種評價？", a: "其智慧與造福人類的功績宛若神人，值得後世尊崇。", b: "雖有功勞，但因過度破壞自然，故在古代不被主流文人重視。", c: "A" },
+    { t: "科學工藝", q: "「草木之實，其中蘊藏膏液，而不能自流」這句話傳達的核心科學觀念是什麼？", a: "自然資源雖然豐富，但多數物質必須仰賴人工技術與工具介入才能供人使用。", b: "植物種子內的油脂會隨著季節變化而乾涸，必須把握時間採收。", c: "A" },
+    { t: "科學工藝", q: "宋應星提到要讓膏液「傾注而出」，必須憑藉什麼方法？", a: "依靠長時間的靜置與天然陽光的曝曬。", b: "藉助水火的熬煮，以及木石工具的壓榨。", c: "B" },
+    { t: "科學工藝", q: "「乃車得一輈而轉轄，舟得一石而罅完，非此物之為功也不可行矣。」這段話說明了膏液（油脂）在交通工具中扮演什麼關鍵角色？", a: "作為驅動舟車前進的主要燃料動力。", b: "作為車軸的潤滑劑以及船隻縫隙的填補物。", c: "B" },
+    { t: "科學工藝", q: "〈殺青緒言〉中的「殺青」一詞，在此篇文章中主要指代何種技術？", a: "處理竹木原料以造紙的技術。", b: "烘焙茶葉以去除水分的技術。", c: "A" },
+    { t: "科學工藝", q: "「古傳今而華達夷，使後起含生，目授而心識之，承載者以何物哉？」此處的「承載者」指的是什麼？", a: "能夠跨越時空、傳遞知識與文化的「紙張與書籍」。", b: "能夠跨越地理限制、運送學者與物資的「舟車交通」。", c: "A" },
+    { t: "科學工藝", q: "「身為竹骨與木皮，殺其青而白乃見，萬卷百家，基從此起。」這段話描寫的過程為何？", a: "砍伐森林中的竹木來興建藏書閣的過程。", b: "褪去竹木表皮的青色，提煉出白色纖維來造紙的過程。", c: "B" },
+    { t: "文意理解", q: "作者感嘆「使漢、晉時人擅名記者，何其陋哉！」其原因為何？", a: "漢晉時期的文人學識不足，寫出的文章內容不如明代豐富。", b: "漢晉時期的人仍多仰賴笨重的竹簡木札，比起後世的紙張顯得簡陋不便。", c: "B" },
+    { t: "統測趨勢", q: "綜合三篇緒言，《天工開物》一書最想傳達的哲理為何？", a: "順應自然、減少人為干預的道家「無為」思想。", b: "強調「人力」與「自然」相輔相成，肯定勞動與工藝價值的實用主義。", c: "B" },
+    { t: "統測趨勢", q: "「若各居而老死，何藉有群『類』哉」中的「類」字，意思為何？", a: "指「群體、同類」，名詞用法。", b: "指「類似、好像」，動詞用法。", c: "A" },
+    { t: "統測趨勢", q: "多數航空公司推出『類』出國航班」中的「類」字，與下列何者意思相同？", a: "仰觀宇宙之大，俯察品「類」之盛。", b: "病瘻，隆然伏行，有「類」癩駝者。", c: "B" },
+    { t: "統測趨勢", q: "若以劉半農的分類標準來看，宋應星撰寫《天工開物》主要記錄農業與手工技術，其本質最符合哪一種文體定義？", a: "屬於滿足日常實用需求、通人應世之書的「應用文」。", b: "屬於注重修辭造句、陶冶性情的「文學文」。", c: "A" }
 ];
 
-// 核心邏輯：隨機選取 15 題
+// 隨機選取 15 題
 const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 15);
 const listEl = document.getElementById('questions-list');
 let userAnswers = {};
@@ -114,11 +112,11 @@ selected.forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'q-card';
     card.innerHTML = `
-        <span class="tag tag-${item.t}">${item.t}分類</span>
+        <span class="tag tag-${item.t}">${item.t}題型</span>
         <div class="q-text">${i+1}. ${item.q}</div>
         <div class="options">
-            <button class="opt-btn" onclick="pick(${i}, 'A', this)">A. ${item.a}</button>
-            <button class="opt-btn" onclick="pick(${i}, 'B', this)">B. ${item.b}</button>
+            <button class="opt-btn" onclick="pick(${i}, 'A', this)">(A) ${item.a}</button>
+            <button class="opt-btn" onclick="pick(${i}, 'B', this)">(B) ${item.b}</button>
         </div>
     `;
     listEl.appendChild(card);
@@ -137,7 +135,7 @@ function submitToGoogle() {
     const name = document.getElementById('stu-name').value;
 
     if (!cls || !no || !name) { alert("請填寫班級、座號與姓名！"); return; }
-    if (Object.keys(userAnswers).length < 15) { alert("還有題目沒寫完喔！"); return; }
+    if (Object.keys(userAnswers).length < 15) { alert("還有題目未完成喔！"); return; }
 
     let score = 0;
     selected.forEach((item, i) => { if (userAnswers[i] === item.c) score += (100 / 15); });
@@ -167,7 +165,6 @@ function submitToGoogle() {
     form.submit();
     document.body.removeChild(form);
 
-    // 切換至結果畫面
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-area').style.display = 'block';
     document.getElementById('final-score').innerText = score;
