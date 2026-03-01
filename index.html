@@ -10,11 +10,16 @@
             --accent: #3498db;
             --success: #27ae60;
             --bg: #ffffff;
+            --tag-author: #8e44ad; /* 紫色：作者 */
+            --tag-transport: #e67e22; /* 橘色：舟車 */
+            --tag-oil: #f1c40f; /* 黃色：膏液 */
+            --tag-paper: #27ae60; /* 綠色：殺青 */
+            --tag-trend: #e74c3c; /* 紅色：統測趨勢 */
         }
-        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background-color: var(--bg); color: #333; margin: 0; padding: 15px; line-height: 1.6; }
+        body { font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg); color: #333; margin: 0; padding: 15px; line-height: 1.6; }
         .container { max-width: 600px; margin: 0 auto; }
         header { text-align: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 25px; padding: 10px 0; }
-        h1 { font-size: 1.4rem; color: var(--primary); margin: 5px 0; }
+        h1 { font-size: 1.5rem; color: var(--primary); margin: 5px 0; }
         
         /* 學生資訊 */
         .info-box { background: #f9f9f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px; }
@@ -25,24 +30,25 @@
 
         /* 題目卡片 */
         .q-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-        .tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; margin-bottom: 10px; }
+        .tag { display: inline-block; padding: 3px 12px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; margin-bottom: 12px; }
         
-        /* 視覺標記分類 */
-        .tag-夢溪 { background-color: #9b59b6; } 
-        .tag-粹精 { background-color: #e67e22; }
-        .tag-作鹹 { background-color: #2980b9; }
-        .tag-乃粒 { background-color: #27ae60; }
-        .tag-彰施 { background-color: #e74c3c; }
+        .tag-作者 { background-color: var(--tag-author); }
+        .tag-舟車 { background-color: var(--tag-transport); }
+        .tag-膏液 { background-color: var(--tag-oil); color: #333; }
+        .tag-殺青 { background-color: var(--tag-paper); }
+        .tag-趨勢 { background-color: var(--tag-trend); }
 
-        .q-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
+        .q-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; color: var(--primary); }
         .options { display: grid; gap: 10px; }
-        .opt-btn { background: #fff; border: 2px solid #f0f0f0; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .opt-btn { background: #fff; border: 2px solid #f0f0f0; padding: 14px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 1rem; transition: 0.2s; line-height: 1.4; }
+        .opt-btn:hover { background-color: #fcfcfc; }
         .opt-btn.selected { border-color: var(--accent); background-color: #ebf5fb; font-weight: bold; color: var(--accent); }
         
-        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 16px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 18px; border: none; border-radius: 10px; font-size: 1.25rem; font-weight: bold; margin-top: 20px; cursor: pointer; transition: 0.3s; }
+        #submit-btn:hover { background: #1a252f; }
         
-        #result-area { display: none; text-align: center; padding: 50px 20px; }
-        .score { font-size: 4rem; color: var(--success); font-weight: bold; margin: 15px 0; }
+        #result-area { display: none; text-align: center; padding: 60px 20px; }
+        .score { font-size: 5rem; color: var(--success); font-weight: bold; margin: 10px 0; }
         #hidden_iframe { display: none; }
     </style>
 </head>
@@ -51,12 +57,12 @@
 <div class="container" id="quiz-container">
     <header>
         <h1>《天工開物》總複習自我測驗</h1>
-        <p style="font-size:0.9rem; color:#888;">本次測驗隨機挑選 15 題</p>
+        <p style="font-size:0.9rem; color:#888;">高三精華版 ‧ 隨機挑選 15 題</p>
     </header>
 
     <div class="info-box">
         <div><label>班級</label><input type="text" id="stu-class" placeholder="如 811"></div>
-        <div><label>座號</label><input type="number" id="stu-no" placeholder="號碼"></div>
+        <div><label>座號</label><input type="number" id="stu-no" placeholder="座號"></div>
         <div style="flex: 1 1 100%;"><label>姓名</label><input type="text" id="stu-name" placeholder="請輸入姓名"></div>
     </div>
 
@@ -65,63 +71,63 @@
 </div>
 
 <div class="container" id="result-area">
-    <h2>測驗完成！</h2>
+    <h2 style="color:var(--primary)">測驗提交完成！</h2>
     <p>您的得分為</p>
     <div class="score" id="final-score">0</div>
-    <p>分數已自動更新至 Google 表單統計中。</p>
-    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline;">重新挑戰</button>
+    <p>分數已同步至老師的 Google 表單後台。</p>
+    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline; font-size:1rem; margin-top:20px;">重新測驗挑戰</button>
 </div>
 
 <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
 
 <script>
-// 擴充題庫 (包含《夢溪筆談》與《天工開物》相關知識)
+// 根據提供內容建立的完整 20 題庫
 const questionBank = [
-    { q: "《天工開物》的作者是誰？", a: "宋應星", b: "沈括", c: "宋應星", t: "粹精" },
-    { q: "《夢溪筆談》的作者是誰？", a: "沈括", b: "宋應星", c: "沈括", t: "夢溪" },
-    { q: "「殺青」在造紙工藝中，主要的目的是什麼？", a: "將紙染綠", b: "加熱去除水分與油脂", c: "加熱去除水分與油脂", t: "粹精" },
-    { q: "《天工開物》被譽為「中國十七世紀的工藝百科全書」，作者生活於？", a: "明朝", b: "宋朝", c: "明朝", t: "粹精" },
-    { q: "古代製鹽過程中，「作鹹」一章提到的主要燃料來源是？", a: "天然氣(火井)", b: "電力", c: "天然氣(火井)", t: "作鹹" },
-    { q: "沈括描述指南針「常微偏東，不全南也」，這是？", a: "磁偏角", b: "磁場倒轉", c: "磁偏角", t: "夢溪" },
-    { q: "「乃粒」一章主要記載的是什麼方面的技術？", a: "糧食與農業", b: "金屬冶煉", c: "糧食與農業", t: "乃粒" },
-    { q: "如何從畫中貓眼的形狀判定為正午？", a: "黑睛細如一條線", b: "黑睛呈圓形", c: "黑睛細如一條線", t: "夢溪" },
-    { q: "在乾式船塢中，支撐龍船的構造是什麼？", a: "橫放木樑與柱子", b: "鐵鉤", c: "橫放木樑與柱子", t: "夢溪" },
-    { q: "「彰施」一章主要討論的是什麼工藝？", a: "染色與織造", b: "建築技術", c: "染色與織造", t: "彰施" },
-    { q: "沈括認為指南針最理想的掛法是？", a: "單繭絲黏綴針腰懸掛", b: "置於指甲上", c: "單繭絲黏綴針腰懸掛", t: "夢溪" },
-    { q: "「粹精」章節主要探討糧食加工，如稻、麥的去殼與磨粉。", a: "正確", b: "錯誤", c: "正確", t: "粹精" },
-    { q: "范仲淹「以工代賑」的策略在現代被視為？", a: "凱因斯式經濟策略", b: "無為而治策略", c: "凱因斯式經濟策略", t: "彰施" },
-    { q: "《天工開物》強調「天工人其代之」，強調人與自然的配合。", a: "正確", b: "錯誤", c: "正確", t: "乃粒" },
-    { q: "凹面鏡(鑑窪)照人面時，影像會變？", a: "變大", b: "變小", c: "變大", t: "夢溪" },
-    { q: "凸面鏡(凸鑑)照人面時，影像會變？", a: "變小", b: "變大", c: "變小", t: "夢溪" },
-    { q: "古代造紙使用的原料不包括？", a: "竹子", b: "塑膠纖維", c: "塑膠纖維", t: "粹精" },
-    { q: "「水浮法」指南針的缺點是？", a: "水面易搖晃不穩", b: "指針會生鏽", c: "水面易搖晃不穩", t: "夢溪" },
-    { q: "古代煉銀的技術在《天工開物》中被歸類為？", a: "五金", b: "作鹹", c: "五金", t: "粹精" },
-    { q: "沈括生活於北宋，宋應星生活於明末。", a: "正確", b: "錯誤", c: "正確", t: "粹精" }
+    { t: "作者", q: "《天工開物》書名中的「天工」一詞，其典故來源為何？", a: "出自《尚書》「天工人其代之」，指大自然的巧妙需要由人類代完成。", b: "出自《易經》「開物成務」，指開發萬物、建立經濟與社會制度。", c: "A" },
+    { t: "作者", q: "宋應星的《天工開物》在中國科學史上有極高的地位，它是一部什麼性質的著作？", a: "記錄明代農業與手工產業技術發展的百科全書。", b: "探討明代經世致用思想與哲學思辨的語錄彙編。", c: "A" },
+    { t: "作者", q: "英國科學史家李約瑟將宋應星比喻為哪位西方歷史人物？", a: "提出科學革命理論的「中國的哥白尼」。", b: "十八世紀編纂百科全書的「中國的狄德羅」。", c: "B" },
+    { t: "作者", q: "關於《天工開物》的流傳歷史，下列敘述何者正確？", a: "該書在清代被廣泛編入《四庫全書》中，成為家喻戶曉的農學教材。", b: "該書在中國一度失傳，直到民國初年才由學者從日本尋得重新刊行。", c: "B" },
+    { t: "舟車", q: "「物有賤而必須，坐窮負販。」這段話主要點出了什麼問題？", a: "古代社會階級森嚴，貴族平民交通工具有嚴格限制。", b: "解決長途跋涉勞累，以及促進物資流通互通有無的必要性。", c: "B" },
+    { t: "舟車", q: "「南資舟而北資車，梯航萬國，能使帝京元氣充然。」反映了何種現象？", a: "因地理環境差異而發展不同交通方式，並帶動國家繁榮。", b: "南方造船與北方造車技術互相競爭，促進明代工業革新。", c: "A" },
+    { t: "舟車", q: "「何其始造舟車者，不食尸祝之報也？」此句使用了何種修辭語氣？", a: "藉由激問語氣表達對發明者未獲祭祀報答的慨嘆。", b: "藉由懸問語氣探討古代為何沒有建立祭祀發明者的制度。", c: "A" },
+    { t: "舟車", q: "作者認為發明舟車的先人，其功績應該受到何種評價？", a: "其智慧與造福人類功績宛若神人，值得後世尊崇。", b: "雖有功勞，但因破壞自然，故在古代不被主流文人重視。", c: "A" },
+    { t: "膏液", q: "「草木之實，其中蘊藏膏液，而不能自流」傳達的核心科學觀念是？", a: "多數物質必須仰賴人工技術與工具介入才能供人使用。", b: "植物種子油脂會隨著季節變化乾涸，必須把握時間採收。", c: "A" },
+    { t: "膏液", q: "宋應星提到讓膏液「傾注而出」，必須憑藉什麼方法？", a: "依靠長時間靜置與天然陽光曝曬。", b: "藉助水火熬煮，以及木石工具壓榨。", c: "B" },
+    { t: "膏液", q: "「舟得一石而罅完，非此物之為功也不可行矣。」膏液扮演什麼角色？", a: "作為驅動舟車前進的主要燃料動力。", b: "作為車軸潤滑劑以及船隻縫隙的填補物。", c: "B" },
+    { t: "殺青", q: "〈殺青緒言〉中的「殺青」一詞，在此篇文章中主要指代？", a: "處理竹木原料以造紙的技術。", b: "烘焙茶葉以去除水分的技術。", c: "A" },
+    { t: "殺青", q: "「古傳今而華達夷...承載者以何物哉？」此處的「承載者」指？", a: "跨越時空傳遞知識文化的「紙張與書籍」。", b: "跨越地理限制運送學者物資的「舟車交通」。", c: "A" },
+    { t: "殺青", q: "「殺其青而白乃見，萬卷百家，基從此起。」這段話描寫的過程為？", a: "砍伐森林竹木來興建藏書閣的過程。", b: "褪去竹木青色表皮，提煉白色纖維造紙的過程。", c: "B" },
+    { t: "殺青", q: "作者感嘆「漢、晉時人擅名記者，何其陋哉！」原因為何？", a: "漢晉文人學識不足，文章內容不如明代豐富。", b: "漢晉人多仰賴笨重竹簡木札，比起後世紙張顯得簡陋。", c: "B" },
+    { t: "趨勢", q: "《天工開物》一書最想傳達的哲理為何？", a: "順應自然、減少人為干預的道家「無為」思想。", b: "強調「人力」與「自然」相輔相成，肯定勞動與工藝價值。", c: "B" },
+    { t: "趨勢", q: "「若各居而老死，何藉有群『類』哉」中的「類」字，意思為何？", a: "指「群體、同類」，名詞用法。", b: "指「類似、好像」，動詞用法。", c: "A" },
+    { t: "趨勢", q: "多數航空公司推出『類』出國航班」中的「類」字，與下列何者相同？", a: "仰觀宇宙之大，俯察品「類」之盛。", b: "病瘻，隆然伏行，有「類」癩駝者。", c: "B" },
+    { t: "趨勢", q: "劉半農認為「應用文」與「文學文」最大的差異為何？", a: "應用文如家常便飯重實用；文學文如肥魚大肉重藝術美感。", b: "應用文須遵守法規；文學文隨性創作不需章法。", c: "A" },
+    { t: "趨勢", q: "以劉半農的分類來看，《天工開物》的本質最符合哪種文體？", a: "屬於滿足日常實用需求、通人應世之書的「應用文」。", b: "屬於注重修辭造句、陶冶性情的「文學文」。", c: "A" }
 ];
 
-// 關鍵修改：從庫中隨機選 15 題
+// 核心邏輯：隨機選取 15 題
 const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 15);
 const listEl = document.getElementById('questions-list');
-let answers = {};
+let userAnswers = {};
 
 selected.forEach((item, i) => {
     const card = document.createElement('div');
     card.className = 'q-card';
     card.innerHTML = `
-        <span class="tag tag-${item.t}">${item.t}相關</span>
+        <span class="tag tag-${item.t}">${item.t}分類</span>
         <div class="q-text">${i+1}. ${item.q}</div>
         <div class="options">
-            <button class="opt-btn" onclick="pick(${i}, '${item.a}', this)">${item.a}</button>
-            <button class="opt-btn" onclick="pick(${i}, '${item.b}', this)">${item.b}</button>
+            <button class="opt-btn" onclick="pick(${i}, 'A', this)">A. ${item.a}</button>
+            <button class="opt-btn" onclick="pick(${i}, 'B', this)">B. ${item.b}</button>
         </div>
     `;
     listEl.appendChild(card);
 });
 
 function pick(i, val, btn) {
-    answers[i] = val;
-    const parent = btn.parentElement;
-    Array.from(parent.children).forEach(b => b.classList.remove('selected'));
+    userAnswers[i] = val;
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
 }
 
@@ -130,29 +136,30 @@ function submitToGoogle() {
     const no = document.getElementById('stu-no').value;
     const name = document.getElementById('stu-name').value;
 
-    if (!cls || !no || !name) { alert("資訊不完整喔！"); return; }
-    if (Object.keys(answers).length < 15) { alert("還有題目沒寫完喔！"); return; }
+    if (!cls || !no || !name) { alert("請填寫班級、座號與姓名！"); return; }
+    if (Object.keys(userAnswers).length < 15) { alert("還有題目沒寫完喔！"); return; }
 
     let score = 0;
-    selected.forEach((item, i) => { if (answers[i] === item.c) score += (100 / 15); });
+    selected.forEach((item, i) => { if (userAnswers[i] === item.c) score += (100 / 15); });
     score = Math.round(score);
 
-    // 您的 Google 表單連動參數
+    // Google 表單參數
     const formID = "1FAIpQLSeKwAK1Zama9OYbUrgThIbhncSMrehNlQ4r7dZMnq8zB2ZwKA";
-    const entryClass = "entry.811616198";
-    const entryNo = "entry.1530773459";
-    const entryName = "entry.923003213";
-    const entryScore = "entry.1489395625";
+    const entries = {
+        "entry.811616198": cls,
+        "entry.1530773459": no,
+        "entry.923003213": name,
+        "entry.1489395625": score
+    };
 
     const form = document.createElement('form');
     form.method = "POST";
     form.action = `https://docs.google.com/forms/d/e/${formID}/formResponse`;
     form.target = "hidden_iframe";
 
-    const data = { [entryClass]: cls, [entryNo]: no, [entryName]: name, [entryScore]: score };
-    for (let key in data) {
+    for (let key in entries) {
         let input = document.createElement('input');
-        input.type = "hidden"; input.name = key; input.value = data[key];
+        input.type = "hidden"; input.name = key; input.value = entries[key];
         form.appendChild(input);
     }
 
@@ -160,9 +167,11 @@ function submitToGoogle() {
     form.submit();
     document.body.removeChild(form);
 
+    // 切換至結果畫面
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-area').style.display = 'block';
     document.getElementById('final-score').innerText = score;
+    window.scrollTo(0, 0);
 }
 </script>
 </body>
