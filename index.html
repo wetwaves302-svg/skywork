@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>科普與工藝複習測驗</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --success-color: #27ae60;
+            --bg-color: #ffffff;
+            --card-bg: #fdfdfd;
+        }
+        body { font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); color: #333; margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 650px; margin: 0 auto; }
+        header { text-align: center; border-bottom: 2px solid #eee; margin-bottom: 30px; padding-bottom: 10px; }
+        
+        /* 學生資訊欄位 */
+        .user-info-section { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #eee; display: grid; gap: 15px; grid-template-columns: 1fr 1fr; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group.full { grid-column: span 2; }
+        label { font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; color: var(--primary-color); }
+        input { padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
+        input:focus { border-color: var(--accent-color); outline: none; }
+
+        /* 題目卡片設計 */
+        .question-card { background: var(--card-bg); border: 1px solid #eaeaea; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .question-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .tag { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: bold; text-transform: uppercase; }
+        
+        /* 鮮明標籤顏色 */
+        .tag-夢溪 { background-color: #8e44ad; } /* 紫色 */
+        .tag-天工 { background-color: #d35400; } /* 橘色 */
+        .tag-科普 { background-color: #2980b9; } /* 藍色 */
+        .tag-語文 { background-color: #27ae60; } /* 綠色 */
+
+        .question-text { font-size: 1.15rem; font-weight: 600; color: #2c3e50; margin-bottom: 20px; }
+        .options { display: grid; gap: 12px; }
+        
+        .opt-btn { border: 2px solid #f0f0f0; background: white; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 1rem; text-align: left; transition: all 0.2s ease; position: relative; padding-left: 45px; }
+        .opt-btn:hover { background-color: #fcfcfc; border-color: #ccc; }
+        .opt-btn::before { content: ''; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 50%; }
+        .opt-btn.selected { border-color: var(--accent-color); background-color: #ebf5fb; font-weight: bold; color: var(--accent-color); }
+        .opt-btn.selected::before { border-color: var(--accent-color); background-color: var(--accent-color); box-shadow: inset 0 0 0 3px white; }
+        
+        #submit-btn { width: 100%; background: var(--primary-color); color: white; padding: 18px; border: none; border-radius: 12px; font-size: 1.25rem; margin-top: 30px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
+        #submit-btn:hover { background: #1a252f; }
+
+        /* 結果畫面 */
+        #result-area { display: none; text-align: center; padding: 80px 20px; }
+        .score-circle { width: 150px; height: 150px; border: 8px solid var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 30px auto; font-size: 3.5rem; font-weight: bold; color: var(--success-color); }
+        
+        #hidden_iframe { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="quiz-container">
+    <header>
+        <h1>科普與工藝複習測驗</h1>
+        <p>請根據所學知識選出正確答案</p>
+    </header>
+    
+    <div class="user-info-section">
+        <div class="input-group">
+            <label>班級</label>
+            <input type="text" id="stu-class" placeholder="如: 801">
+        </div>
+        <div class="input-group">
+            <label>座號</label>
+            <input type="number" id="stu-no" placeholder="如: 01">
+        </div>
+        <div class="input-group full">
+            <label>姓名</label>
+            <input type="text" id="stu-name" placeholder="請輸入真實姓名">
+        </div>
+    </div>
+
+    <div id="questions-list"></div>
+    <button id="submit-btn" onclick="submitToGoogle()">確認交卷並查看分數</button>
+</div>
+
+<div class="container" id="result-area">
+    <h2 style="color: var(--primary-color)">測驗提交完成！</h2>
+    <div class="score-circle" id="final-score">0</div>
+    <p>您的作答紀錄已成功同步至 Google 表單。</p>
+    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent-color); cursor:pointer; text-decoration:underline;">重新測驗</button>
+</div>
+
+<iframe name="hidden_iframe" id="hidden_iframe"></iframe>
+
+<script>
+// 結合兩張圖表的題庫
+const questionBank = [
+    { q: "《夢溪筆談》的作者是誰？", a: "沈括", b: "宋應星", c: "沈括", t: "夢溪" },
+    { q: "沈括生活於哪一個朝代？", a: "北宋", b: "南宋", c: "北宋", t: "夢溪" },
+    { q: "《天工開物》的作者是誰？", a: "沈括", b: "宋應星", c: "宋應星", t: "天工" },
+    { q: "哪兩部著作同為中國古代科技的重要文獻？", a: "《夢溪筆談》與《天工開物》", b: "《夢溪筆談》與《本草綱目》", c: "《夢溪筆談》與《天工開物》", t: "科普" },
+    { q: "文中將「應用文」比喻為生活中的什麼？", a: "山珍海味", b: "家常便飯", c: "家常便飯", t: "語文" },
+    { q: "「殺青」在古代造紙流程中的含義為何？", a: "加熱去除水分", b: "將紙張染成綠色", c: "加熱去除水分", t: "科普" },
+    { q: "如何從畫中貓眼的形狀判定為正午時分？", a: "黑睛細如一條線", b: "黑睛呈圓形", c: "黑睛細如一條線", t: "夢溪" },
+    { q: "磁石磨針鋒後，針鋒會產生什麼現象？", a: "指向北方", b: "指向南方", c: "指向南方", t: "科普" },
+    { q: "在乾式船塢中，支撐龍船的構造是什麼？", a: "橫放木樑", b: "水泥柱", c: "橫放木樑", t: "科普" },
+    { q: "范仲淹「以工代賑」的資金主要來自哪裡？", a: "公家剩錢與民間富人資助", b: "皇帝私人庫房", c: "公家剩錢與民間富人資助", t: "語文" },
+    { q: "「類出國」一詞中的「類」字，意義與下列何者相近？", a: "種類", b: "類比(相似)", c: "類比(相似)", t: "語文" },
+    { q: "沈括描述指南針「常微偏東，不全南也」是哪種現象？", a: "磁偏角", b: "磁場倒轉", c: "磁偏角", t: "科普" }
+];
+
+// 隨機打亂並選取 10 題
+const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 10);
+const listEl = document.getElementById('questions-list');
+
+selected.forEach((item, idx) => {
+    const card = document.createElement('div');
+    card.className = 'question-card';
+    card.innerHTML = `
+        <div class="question-header">
+            <span class="tag tag-${item.t}">${item.t}相關</span>
+        </div>
+        <div class="question-text">${idx+1}. ${item.q}</div>
+        <div class="options">
+            <button class="opt-btn" onclick="choose(this, ${idx}, '${item.a}')">A. ${item.a}</button>
+            <button class="opt-btn" onclick="choose(this, ${idx}, '${item.b}')">B. ${item.b}</button>
+        </div>
+    `;
+    listEl.appendChild(card);
+});
+
+let userAnswers = {};
+function choose(btn, qIdx, val) {
+    userAnswers[qIdx] = val;
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+}
+
+function submitToGoogle() {
+    const cls = document.getElementById('stu-class').value;
+    const no = document.getElementById('stu-no').value;
+    const name = document.getElementById('stu-name').value;
+
+    if (!cls || !no || !name) { alert("請完整填寫班級、座號與姓名！"); return; }
+    if (Object.keys(userAnswers).length < selected.length) { alert("還有題目沒寫完喔！"); return; }
+
+    let score = 0;
+    selected.forEach((item, idx) => {
+        if (userAnswers[idx] === item.c) score += (100 / selected.length);
+    });
+
+    // 表單連動資訊
+    const formID = "1FAIpQLSeKwAK1Zama9OYbUrgThIbhncSMrehNlQ4r7dZMnq8zB2ZwKA";
+    const entryClass = "entry.811616198";
+    const entryNo = "entry.1530773459";
+    const entryName = "entry.923003213";
+    const entryScore = "entry.1489395625";
+
+    const form = document.createElement('form');
+    form.method = "POST";
+    form.action = `https://docs.google.com/forms/d/e/${formID}/formResponse`;
+    form.target = "hidden_iframe";
+
+    const fields = {
+        [entryClass]: cls,
+        [entryNo]: no,
+        [entryName]: name,
+        [entryScore]: Math.round(score)
+    };
+
+    for (let key in fields) {
+        const input = document.createElement('input');
+        input.type = "hidden";
+        input.name = key;
+        input.value = fields[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+    document.body.removeChild(form);
+
+    document.getElementById('quiz-container').style.display = 'none';
+    document.getElementById('result-area').style.display = 'block';
+    document.getElementById('final-score').innerText = Math.round(score);
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
