@@ -3,54 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>天工開物 總複習自我測驗</title>
+    <title>《天工開物》總複習自我測驗</title>
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --accent-color: #3498db;
-            --success-color: #27ae60;
-            --bg-color: #ffffff;
-            --card-bg: #fdfdfd;
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --success: #27ae60;
+            --bg: #ffffff;
         }
-        body { font-family: -apple-system, "Noto Sans TC", "Microsoft JhengHei", sans-serif; background-color: var(--bg-color); color: #333; margin: 0; padding: 20px; line-height: 1.6; }
-        .container { max-width: 650px; margin: 0 auto; }
-        header { text-align: center; border-bottom: 2px solid #eee; margin-bottom: 30px; padding-bottom: 10px; }
+        body { font-family: -apple-system, "Noto Sans TC", sans-serif; background-color: var(--bg); color: #333; margin: 0; padding: 15px; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; }
+        header { text-align: center; border-bottom: 2px solid #f0f0f0; margin-bottom: 25px; padding: 10px 0; }
+        h1 { font-size: 1.4rem; color: var(--primary); margin: 5px 0; }
         
-        /* 學生資訊欄位 */
-        .user-info-section { background: #f8f9fa; border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 1px solid #eee; display: grid; gap: 15px; grid-template-columns: 1fr 1fr; }
-        .input-group { display: flex; flex-direction: column; }
-        .input-group.full { grid-column: span 2; }
-        label { font-weight: bold; font-size: 0.9rem; margin-bottom: 5px; color: var(--primary-color); }
-        input { padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 1rem; transition: border-color 0.3s; }
-        input:focus { border-color: var(--accent-color); outline: none; }
+        /* 學生資訊 */
+        .info-box { background: #f9f9f9; border-radius: 12px; padding: 15px; margin-bottom: 20px; border: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 10px; }
+        .info-box div { flex: 1 1 120px; }
+        label { display: block; font-size: 0.85rem; font-weight: bold; margin-bottom: 5px; color: #666; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        input:focus { border-color: var(--accent); outline: none; }
 
-        /* 題目卡片設計 */
-        .question-card { background: var(--card-bg); border: 1px solid #eaeaea; border-radius: 15px; padding: 25px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .question-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
-        .tag { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: bold; text-transform: uppercase; }
+        /* 題目卡片 */
+        .q-card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .tag { display: inline-block; padding: 2px 10px; border-radius: 4px; font-size: 0.75rem; color: white; font-weight: bold; margin-bottom: 10px; }
         
-        /* 鮮明標籤顏色 */
-        .tag-夢溪 { background-color: #8e44ad; } /* 紫色 */
-        .tag-天工 { background-color: #d35400; } /* 橘色 */
-        .tag-科普 { background-color: #2980b9; } /* 藍色 */
-        .tag-語文 { background-color: #27ae60; } /* 綠色 */
+        /* 視覺標記分類 */
+        .tag-夢溪 { background-color: #9b59b6; } 
+        .tag-粹精 { background-color: #e67e22; }
+        .tag-作鹹 { background-color: #2980b9; }
+        .tag-乃粒 { background-color: #27ae60; }
+        .tag-彰施 { background-color: #e74c3c; }
 
-        .question-text { font-size: 1.15rem; font-weight: 600; color: #2c3e50; margin-bottom: 20px; }
-        .options { display: grid; gap: 12px; }
+        .q-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; }
+        .options { display: grid; gap: 10px; }
+        .opt-btn { background: #fff; border: 2px solid #f0f0f0; padding: 12px; border-radius: 8px; text-align: left; cursor: pointer; font-size: 1rem; transition: 0.2s; }
+        .opt-btn.selected { border-color: var(--accent); background-color: #ebf5fb; font-weight: bold; color: var(--accent); }
         
-        .opt-btn { border: 2px solid #f0f0f0; background: white; padding: 15px; border-radius: 10px; cursor: pointer; font-size: 1rem; text-align: left; transition: all 0.2s ease; position: relative; padding-left: 45px; }
-        .opt-btn:hover { background-color: #fcfcfc; border-color: #ccc; }
-        .opt-btn::before { content: ''; position: absolute; left: 15px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; border: 2px solid #ddd; border-radius: 50%; }
-        .opt-btn.selected { border-color: var(--accent-color); background-color: #ebf5fb; font-weight: bold; color: var(--accent-color); }
-        .opt-btn.selected::before { border-color: var(--accent-color); background-color: var(--accent-color); box-shadow: inset 0 0 0 3px white; }
+        #submit-btn { width: 100%; background: var(--primary); color: #fff; padding: 16px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: bold; margin-top: 20px; cursor: pointer; }
         
-        #submit-btn { width: 100%; background: var(--primary-color); color: white; padding: 18px; border: none; border-radius: 12px; font-size: 1.25rem; margin-top: 30px; cursor: pointer; font-weight: bold; transition: background 0.3s; }
-        #submit-btn:hover { background: #1a252f; }
-
-        /* 結果畫面 */
-        #result-area { display: none; text-align: center; padding: 80px 20px; }
-        .score-circle { width: 150px; height: 150px; border: 8px solid var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 30px auto; font-size: 3.5rem; font-weight: bold; color: var(--success-color); }
-        
+        #result-area { display: none; text-align: center; padding: 50px 20px; }
+        .score { font-size: 4rem; color: var(--success); font-weight: bold; margin: 15px 0; }
         #hidden_iframe { display: none; }
     </style>
 </head>
@@ -58,80 +50,78 @@
 
 <div class="container" id="quiz-container">
     <header>
-        <h1>科普與工藝複習測驗</h1>
-        <p>請根據所學知識選出正確答案</p>
+        <h1>《天工開物》總複習自我測驗</h1>
+        <p style="font-size:0.9rem; color:#888;">本次測驗隨機挑選 15 題</p>
     </header>
-    
-    <div class="user-info-section">
-        <div class="input-group">
-            <label>班級</label>
-            <input type="text" id="stu-class" placeholder="如: 801">
-        </div>
-        <div class="input-group">
-            <label>座號</label>
-            <input type="number" id="stu-no" placeholder="如: 01">
-        </div>
-        <div class="input-group full">
-            <label>姓名</label>
-            <input type="text" id="stu-name" placeholder="請輸入真實姓名">
-        </div>
+
+    <div class="info-box">
+        <div><label>班級</label><input type="text" id="stu-class" placeholder="如 811"></div>
+        <div><label>座號</label><input type="number" id="stu-no" placeholder="號碼"></div>
+        <div style="flex: 1 1 100%;"><label>姓名</label><input type="text" id="stu-name" placeholder="請輸入姓名"></div>
     </div>
 
     <div id="questions-list"></div>
-    <button id="submit-btn" onclick="submitToGoogle()">確認交卷並查看分數</button>
+    <button id="submit-btn" onclick="submitToGoogle()">確認交卷並送出分數</button>
 </div>
 
 <div class="container" id="result-area">
-    <h2 style="color: var(--primary-color)">測驗提交完成！</h2>
-    <div class="score-circle" id="final-score">0</div>
-    <p>您的作答紀錄已成功同步至 Google 表單。</p>
-    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent-color); cursor:pointer; text-decoration:underline;">重新測驗</button>
+    <h2>測驗完成！</h2>
+    <p>您的得分為</p>
+    <div class="score" id="final-score">0</div>
+    <p>分數已自動更新至 Google 表單統計中。</p>
+    <button onclick="location.reload()" style="background:none; border:none; color:var(--accent); cursor:pointer; text-decoration:underline;">重新挑戰</button>
 </div>
 
 <iframe name="hidden_iframe" id="hidden_iframe"></iframe>
 
 <script>
-// 結合兩張圖表的題庫
+// 擴充題庫 (包含《夢溪筆談》與《天工開物》相關知識)
 const questionBank = [
+    { q: "《天工開物》的作者是誰？", a: "宋應星", b: "沈括", c: "宋應星", t: "粹精" },
     { q: "《夢溪筆談》的作者是誰？", a: "沈括", b: "宋應星", c: "沈括", t: "夢溪" },
-    { q: "沈括生活於哪一個朝代？", a: "北宋", b: "南宋", c: "北宋", t: "夢溪" },
-    { q: "《天工開物》的作者是誰？", a: "沈括", b: "宋應星", c: "宋應星", t: "天工" },
-    { q: "哪兩部著作同為中國古代科技的重要文獻？", a: "《夢溪筆談》與《天工開物》", b: "《夢溪筆談》與《本草綱目》", c: "《夢溪筆談》與《天工開物》", t: "科普" },
-    { q: "文中將「應用文」比喻為生活中的什麼？", a: "山珍海味", b: "家常便飯", c: "家常便飯", t: "語文" },
-    { q: "「殺青」在古代造紙流程中的含義為何？", a: "加熱去除水分", b: "將紙張染成綠色", c: "加熱去除水分", t: "科普" },
-    { q: "如何從畫中貓眼的形狀判定為正午時分？", a: "黑睛細如一條線", b: "黑睛呈圓形", c: "黑睛細如一條線", t: "夢溪" },
-    { q: "磁石磨針鋒後，針鋒會產生什麼現象？", a: "指向北方", b: "指向南方", c: "指向南方", t: "科普" },
-    { q: "在乾式船塢中，支撐龍船的構造是什麼？", a: "橫放木樑", b: "水泥柱", c: "橫放木樑", t: "科普" },
-    { q: "范仲淹「以工代賑」的資金主要來自哪裡？", a: "公家剩錢與民間富人資助", b: "皇帝私人庫房", c: "公家剩錢與民間富人資助", t: "語文" },
-    { q: "「類出國」一詞中的「類」字，意義與下列何者相近？", a: "種類", b: "類比(相似)", c: "類比(相似)", t: "語文" },
-    { q: "沈括描述指南針「常微偏東，不全南也」是哪種現象？", a: "磁偏角", b: "磁場倒轉", c: "磁偏角", t: "科普" }
+    { q: "「殺青」在造紙工藝中，主要的目的是什麼？", a: "將紙染綠", b: "加熱去除水分與油脂", c: "加熱去除水分與油脂", t: "粹精" },
+    { q: "《天工開物》被譽為「中國十七世紀的工藝百科全書」，作者生活於？", a: "明朝", b: "宋朝", c: "明朝", t: "粹精" },
+    { q: "古代製鹽過程中，「作鹹」一章提到的主要燃料來源是？", a: "天然氣(火井)", b: "電力", c: "天然氣(火井)", t: "作鹹" },
+    { q: "沈括描述指南針「常微偏東，不全南也」，這是？", a: "磁偏角", b: "磁場倒轉", c: "磁偏角", t: "夢溪" },
+    { q: "「乃粒」一章主要記載的是什麼方面的技術？", a: "糧食與農業", b: "金屬冶煉", c: "糧食與農業", t: "乃粒" },
+    { q: "如何從畫中貓眼的形狀判定為正午？", a: "黑睛細如一條線", b: "黑睛呈圓形", c: "黑睛細如一條線", t: "夢溪" },
+    { q: "在乾式船塢中，支撐龍船的構造是什麼？", a: "橫放木樑與柱子", b: "鐵鉤", c: "橫放木樑與柱子", t: "夢溪" },
+    { q: "「彰施」一章主要討論的是什麼工藝？", a: "染色與織造", b: "建築技術", c: "染色與織造", t: "彰施" },
+    { q: "沈括認為指南針最理想的掛法是？", a: "單繭絲黏綴針腰懸掛", b: "置於指甲上", c: "單繭絲黏綴針腰懸掛", t: "夢溪" },
+    { q: "「粹精」章節主要探討糧食加工，如稻、麥的去殼與磨粉。", a: "正確", b: "錯誤", c: "正確", t: "粹精" },
+    { q: "范仲淹「以工代賑」的策略在現代被視為？", a: "凱因斯式經濟策略", b: "無為而治策略", c: "凱因斯式經濟策略", t: "彰施" },
+    { q: "《天工開物》強調「天工人其代之」，強調人與自然的配合。", a: "正確", b: "錯誤", c: "正確", t: "乃粒" },
+    { q: "凹面鏡(鑑窪)照人面時，影像會變？", a: "變大", b: "變小", c: "變大", t: "夢溪" },
+    { q: "凸面鏡(凸鑑)照人面時，影像會變？", a: "變小", b: "變大", c: "變小", t: "夢溪" },
+    { q: "古代造紙使用的原料不包括？", a: "竹子", b: "塑膠纖維", c: "塑膠纖維", t: "粹精" },
+    { q: "「水浮法」指南針的缺點是？", a: "水面易搖晃不穩", b: "指針會生鏽", c: "水面易搖晃不穩", t: "夢溪" },
+    { q: "古代煉銀的技術在《天工開物》中被歸類為？", a: "五金", b: "作鹹", c: "五金", t: "粹精" },
+    { q: "沈括生活於北宋，宋應星生活於明末。", a: "正確", b: "錯誤", c: "正確", t: "粹精" }
 ];
 
-// 隨機打亂並選取 10 題
-const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 10);
+// 關鍵修改：從庫中隨機選 15 題
+const selected = questionBank.sort(() => 0.5 - Math.random()).slice(0, 15);
 const listEl = document.getElementById('questions-list');
+let answers = {};
 
-selected.forEach((item, idx) => {
+selected.forEach((item, i) => {
     const card = document.createElement('div');
-    card.className = 'question-card';
+    card.className = 'q-card';
     card.innerHTML = `
-        <div class="question-header">
-            <span class="tag tag-${item.t}">${item.t}相關</span>
-        </div>
-        <div class="question-text">${idx+1}. ${item.q}</div>
+        <span class="tag tag-${item.t}">${item.t}相關</span>
+        <div class="q-text">${i+1}. ${item.q}</div>
         <div class="options">
-            <button class="opt-btn" onclick="choose(this, ${idx}, '${item.a}')">A. ${item.a}</button>
-            <button class="opt-btn" onclick="choose(this, ${idx}, '${item.b}')">B. ${item.b}</button>
+            <button class="opt-btn" onclick="pick(${i}, '${item.a}', this)">${item.a}</button>
+            <button class="opt-btn" onclick="pick(${i}, '${item.b}', this)">${item.b}</button>
         </div>
     `;
     listEl.appendChild(card);
 });
 
-let userAnswers = {};
-function choose(btn, qIdx, val) {
-    userAnswers[qIdx] = val;
-    const btns = btn.parentElement.querySelectorAll('.opt-btn');
-    btns.forEach(b => b.classList.remove('selected'));
+function pick(i, val, btn) {
+    answers[i] = val;
+    const parent = btn.parentElement;
+    Array.from(parent.children).forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
 }
 
@@ -140,15 +130,14 @@ function submitToGoogle() {
     const no = document.getElementById('stu-no').value;
     const name = document.getElementById('stu-name').value;
 
-    if (!cls || !no || !name) { alert("請完整填寫班級、座號與姓名！"); return; }
-    if (Object.keys(userAnswers).length < selected.length) { alert("還有題目沒寫完喔！"); return; }
+    if (!cls || !no || !name) { alert("資訊不完整喔！"); return; }
+    if (Object.keys(answers).length < 15) { alert("還有題目沒寫完喔！"); return; }
 
     let score = 0;
-    selected.forEach((item, idx) => {
-        if (userAnswers[idx] === item.c) score += (100 / selected.length);
-    });
+    selected.forEach((item, i) => { if (answers[i] === item.c) score += (100 / 15); });
+    score = Math.round(score);
 
-    // 表單連動資訊
+    // 您的 Google 表單連動參數
     const formID = "1FAIpQLSeKwAK1Zama9OYbUrgThIbhncSMrehNlQ4r7dZMnq8zB2ZwKA";
     const entryClass = "entry.811616198";
     const entryNo = "entry.1530773459";
@@ -160,18 +149,10 @@ function submitToGoogle() {
     form.action = `https://docs.google.com/forms/d/e/${formID}/formResponse`;
     form.target = "hidden_iframe";
 
-    const fields = {
-        [entryClass]: cls,
-        [entryNo]: no,
-        [entryName]: name,
-        [entryScore]: Math.round(score)
-    };
-
-    for (let key in fields) {
-        const input = document.createElement('input');
-        input.type = "hidden";
-        input.name = key;
-        input.value = fields[key];
+    const data = { [entryClass]: cls, [entryNo]: no, [entryName]: name, [entryScore]: score };
+    for (let key in data) {
+        let input = document.createElement('input');
+        input.type = "hidden"; input.name = key; input.value = data[key];
         form.appendChild(input);
     }
 
@@ -181,8 +162,7 @@ function submitToGoogle() {
 
     document.getElementById('quiz-container').style.display = 'none';
     document.getElementById('result-area').style.display = 'block';
-    document.getElementById('final-score').innerText = Math.round(score);
-    window.scrollTo(0, 0);
+    document.getElementById('final-score').innerText = score;
 }
 </script>
 </body>
